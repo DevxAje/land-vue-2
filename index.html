@@ -1,0 +1,1870 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Land Vue | Premium Property Renovation & Management</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* --- CSS VARIABLES & BASE --- */
+        :root {
+            --color-bg: #0a0a0c;
+            --color-surface: #121215;
+            --color-white: #f5f5f5;
+            --color-muted: #8a8a93;
+            --color-gold: #c5a059;
+            --color-gold-hover: #dfb96e;
+            --color-border: #222226;
+
+            --font-serif: 'Playfair Display', serif;
+            --font-sans: 'Manrope', sans-serif;
+
+            --transition-smooth: 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-fast: 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-white);
+            font-family: var(--font-sans);
+            font-weight: 300;
+            line-height: 1.6;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- SUBTLE GRAIN OVERLAY --- */
+        .grain-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* --- LOADER --- */
+        .loader {
+            position: fixed;
+            inset: 0;
+            background: var(--color-bg);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            color: var(--color-gold);
+            letter-spacing: 2px;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        /* --- TYPOGRAPHY & UTILITIES --- */
+        h1,
+        h2,
+        h3,
+        .serif {
+            font-family: var(--font-serif);
+            font-weight: 400;
+            line-height: 1.1;
+        }
+
+        .text-gold {
+            color: var(--color-gold);
+        }
+
+        .text-muted {
+            color: var(--color-muted);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 5%;
+        }
+
+        .section-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 2rem;
+        }
+
+        .label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 500;
+            color: var(--color-muted);
+        }
+
+        /* --- BUTTONS --- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 2rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            border: none;
+            font-family: var(--font-sans);
+        }
+
+        .btn-primary {
+            background: var(--color-gold);
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background: var(--color-gold-hover);
+            transform: scale(1.02);
+        }
+
+        .btn-text {
+            color: var(--color-white);
+            text-decoration: none;
+            position: relative;
+            padding-bottom: 4px;
+        }
+
+        .btn-text::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: var(--color-gold);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform var(--transition-smooth);
+        }
+
+        .btn-text:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        /* --- HEADER --- */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 2rem 0;
+            z-index: 1000;
+            transition: var(--transition-smooth);
+        }
+
+        header.scrolled {
+            padding: 1rem 0;
+            background: rgba(10, 10, 12, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            color: var(--color-white);
+            text-decoration: none;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+        }
+
+        .nav-links a {
+            color: var(--color-white);
+            text-decoration: none;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--color-gold);
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .menu-toggle span {
+            width: 30px;
+            height: 1px;
+            background: var(--color-white);
+            transition: 0.3s;
+        }
+
+        /* --- MOBILE MENU --- */
+        .mobile-menu {
+            position: fixed;
+            inset: 0;
+            background: var(--color-bg);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            transform: translateY(-100%);
+            transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+
+        .mobile-menu.active {
+            transform: translateY(0);
+        }
+
+        .mobile-link {
+            font-family: var(--font-serif);
+            font-size: 2.5rem;
+            color: var(--color-white);
+            text-decoration: none;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            padding-top: 5rem;
+            position: relative;
+        }
+
+        .hero-left {
+            padding: 0 5% 0 10%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .hero-headline {
+            font-size: clamp(3rem, 6vw, 5.5rem);
+            margin-bottom: 2rem;
+        }
+
+        .hero-line {
+            width: 0;
+            height: 1px;
+            background: var(--color-border);
+            margin: 2rem 0;
+            animation: lineGrow 1.5s ease 0.5s forwards;
+        }
+
+        .hero-subtext {
+            color: var(--color-muted);
+            max-width: 400px;
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .hero-right {
+            position: relative;
+            padding: 2rem 2rem 2rem 0;
+        }
+
+        .hero-img-mask {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            border-radius: 4px;
+        }
+
+        #hero-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(1.1);
+            animation: slowZoom 20s linear infinite alternate;
+        }
+
+        /* --- HERO MARQUEE --- */
+        .marquee-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.2rem 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            background: rgba(10, 10, 12, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 10;
+            display: flex;
+            user-select: none;
+        }
+
+        .marquee-container:hover .marquee-track {
+            animation-play-state: paused;
+        }
+
+        .marquee-track {
+            display: flex;
+            flex-shrink: 0;
+            white-space: nowrap;
+            animation: scrollMarquee 35s linear infinite;
+        }
+
+        .marquee-text {
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            color: var(--color-muted);
+            padding-right: 2rem;
+        }
+
+        /* --- STATS SECTION --- */
+        .stats-section {
+            padding: 8rem 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-num {
+            font-family: var(--font-serif);
+            font-size: 4rem;
+            color: var(--color-gold);
+            display: inline-block;
+        }
+
+        /* --- SERVICES SECTION --- */
+        .services-section {
+            padding: 10rem 0;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 4rem;
+            margin-top: 4rem;
+        }
+
+        .service-card {
+            padding: 3rem;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+            transition: var(--transition-smooth);
+        }
+
+        .service-card:hover {
+            border-color: var(--color-gold);
+            transform: translateY(-5px);
+        }
+
+        .service-icon {
+            width: 40px;
+            height: 40px;
+            color: var(--color-gold);
+            margin-bottom: 2rem;
+        }
+
+        .service-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .service-card p {
+            color: var(--color-muted);
+        }
+
+        .service-watermark {
+            position: absolute;
+            bottom: -20px;
+            right: -10px;
+            font-family: var(--font-serif);
+            font-size: 8rem;
+            color: rgba(255, 255, 255, 0.02);
+            pointer-events: none;
+        }
+
+        /* --- ABOUT (STICKY) SECTION --- */
+        .about-section {
+            padding: 10rem 0;
+            background: var(--color-surface);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            position: relative;
+        }
+
+        .about-left {
+            position: relative;
+        }
+
+        .about-text-block {
+            margin-bottom: 40vh;
+            opacity: 0.2;
+            transition: var(--transition-smooth);
+        }
+
+        .about-text-block:last-child {
+            margin-bottom: 10vh;
+        }
+
+        .about-text-block.active {
+            opacity: 1;
+        }
+
+        .about-text-block h2 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-text-block p {
+            font-size: 1.2rem;
+            color: var(--color-muted);
+        }
+
+        .about-right {
+            position: relative;
+            height: 100%;
+        }
+
+        .sticky-img-container {
+            position: sticky;
+            top: 20vh;
+            height: 60vh;
+            width: 100%;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+
+        .about-img-panel {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out;
+        }
+
+        .about-img-panel.active {
+            opacity: 1;
+            z-index: 2;
+        }
+
+        /* --- PROPERTIES SECTION (AUTO-FADE IMAGES) --- */
+        .properties-section {
+            padding: 10rem 0;
+        }
+
+        .prop-tabs {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 4rem;
+            position: relative;
+            border-bottom: 1px solid var(--color-border);
+            padding-bottom: 1rem;
+        }
+
+        .prop-tab {
+            background: none;
+            border: none;
+            color: var(--color-muted);
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: var(--font-sans);
+        }
+
+        .prop-tab.active {
+            color: var(--color-white);
+        }
+
+        .tab-indicator {
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            height: 2px;
+            background: var(--color-gold);
+            transition: var(--transition-smooth);
+        }
+
+        .prop-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+        }
+
+        .prop-card {
+            cursor: pointer;
+        }
+
+        .prop-img-wrap {
+            position: relative;
+            overflow: hidden;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            aspect-ratio: 4/3;
+        }
+
+        .prop-img-wrap img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+
+        .prop-card:hover .prop-img-wrap img {
+            transform: scale(1.05);
+        }
+
+        /* Auto Crossfade Animation */
+        .img-after {
+            animation: autoCrossfade 6s infinite alternate ease-in-out;
+        }
+
+        @keyframes autoCrossfade {
+
+            0%,
+            25% {
+                opacity: 0;
+            }
+
+            75%,
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .prop-price {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            color: var(--color-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .prop-address {
+            margin-bottom: 1rem;
+            color: var(--color-white);
+        }
+
+        .prop-meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            border-top: 1px solid var(--color-border);
+            padding-top: 1rem;
+        }
+
+        .view-all-wrap {
+            margin-top: 4rem;
+            text-align: center;
+        }
+
+        .view-all-link {
+            color: var(--color-gold);
+            text-decoration: none;
+            font-family: var(--font-serif);
+            font-size: 1.2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: gap 0.3s;
+        }
+
+        .view-all-link:hover {
+            gap: 15px;
+        }
+
+        /* --- TESTIMONIALS SECTION (AUTO-SCROLL) --- */
+        .testimonials-section {
+            padding: 8rem 0;
+            background: var(--color-surface);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .marquee-wrapper {
+            display: flex;
+            overflow: hidden;
+            user-select: none;
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+
+        .marquee-wrapper:hover .testi-track {
+            animation-play-state: paused;
+        }
+
+        .testi-track {
+            display: flex;
+            gap: 3rem;
+            padding-right: 3rem;
+            flex-shrink: 0;
+            animation: scrollTesti 40s linear infinite;
+        }
+
+        .testi-card {
+            min-width: 450px;
+            background: var(--color-bg);
+            padding: 3rem;
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+        }
+
+        .testi-text {
+            font-family: var(--font-serif);
+            font-size: 1.4rem;
+            font-style: italic;
+            margin-bottom: 2rem;
+        }
+
+        .testi-sep {
+            width: 40px;
+            height: 1px;
+            background: var(--color-gold);
+            margin-bottom: 1rem;
+        }
+
+        /* --- CAREERS SECTION --- */
+        .careers-section {
+            padding: 10rem 0;
+            position: relative;
+        }
+
+        .careers-watermark {
+            position: absolute;
+            top: 10%;
+            right: -5%;
+            font-family: var(--font-serif);
+            font-size: 15vw;
+            color: rgba(255, 255, 255, 0.02);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .job-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 4rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-pill {
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            color: var(--color-white);
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: var(--font-sans);
+        }
+
+        .filter-pill.active,
+        .filter-pill:hover {
+            background: var(--color-white);
+            color: var(--color-bg);
+        }
+
+        .job-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .job-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2.5rem;
+            background: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            transition: var(--transition-smooth);
+        }
+
+        .job-card:hover {
+            border-color: var(--color-gold);
+        }
+
+        .job-title {
+            font-family: var(--font-serif);
+            font-size: 1.8rem;
+            flex: 1;
+        }
+
+        .job-title-sub {
+            display: block;
+            font-family: var(--font-sans);
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-top: 5px;
+        }
+
+        .job-meta {
+            display: flex;
+            gap: 4rem;
+            flex: 1;
+        }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 10, 12, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.4s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--color-surface);
+            padding: 4rem;
+            border: 1px solid var(--color-border);
+            border-radius: 4px;
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            transform: translateY(20px);
+            transition: 0.4s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--color-white);
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-control {
+            width: 100%;
+            background: none;
+            border: none;
+            border-bottom: 1px solid var(--color-border);
+            padding: 1rem 0;
+            color: var(--color-white);
+            font-family: var(--font-sans);
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-bottom-color: var(--color-gold);
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: var(--color-gold);
+            color: #000;
+            border: none;
+            padding: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        /* --- CONTACT SECTION --- */
+        .contact-section {
+            padding: 10rem 0;
+            background: var(--color-bg);
+            border-top: 1px solid var(--color-border);
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6rem;
+        }
+
+        .contact-info-block {
+            margin-bottom: 2.5rem;
+        }
+
+        .office-hours {
+            display: flex;
+            gap: 3rem;
+            color: var(--color-muted);
+            margin-top: 3rem;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: var(--color-surface);
+            padding: 6rem 0 2rem 0;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-bottom: 6rem;
+        }
+
+        .footer-col h4 {
+            font-family: var(--font-serif);
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-col ul a,
+        .footer-col ul p {
+            color: var(--color-muted);
+            text-decoration: none;
+            transition: 0.3s;
+            margin: 0;
+        }
+
+        .footer-col ul a:hover {
+            color: var(--color-gold);
+        }
+
+        .footer-bottom {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            color: var(--color-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--color-border);
+            padding-top: 2rem;
+        }
+
+        /* --- ANIMATIONS & REVEALS --- */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes lineGrow {
+            to {
+                width: 100px;
+            }
+        }
+
+        @keyframes slowZoom {
+            to {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes scrollMarquee {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-100%);
+            }
+        }
+
+        @keyframes scrollTesti {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-100%);
+            }
+        }
+
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        .reveal-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 992px) {
+
+            .hero,
+            .stats-grid,
+            .services-grid,
+            .prop-list,
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+
+            .hero {
+                height: auto;
+                padding-top: 8rem;
+            }
+
+            .hero-right {
+                padding: 0 5%;
+                height: 50vh;
+            }
+
+            .nav-links,
+            .hero-actions .btn {
+                display: none;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .job-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.5rem;
+            }
+
+            .job-meta {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            /* Responsive About Grid */
+            .about-grid {
+                display: flex;
+                flex-direction: column-reverse;
+                gap: 2rem;
+            }
+
+            .sticky-img-container {
+                position: relative;
+                top: 0;
+                height: 40vh;
+                margin-bottom: 2rem;
+            }
+
+            .about-text-block {
+                margin-bottom: 3rem;
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Subtle Grain Overlay -->
+    <div class="grain-overlay"></div>
+
+    <!-- Loader -->
+    <div class="loader" id="loader">Land Vue</div>
+
+    <!-- Navigation -->
+    <header id="header">
+        <div class="container nav-container">
+            <a href="#" class="logo">Land Vue</a>
+
+            <nav class="nav-links">
+                <a href="#services">Expertise</a>
+                <a href="#about">Our Vision</a>
+                <a href="#properties">Portfolio</a>
+                <a href="#careers">Careers</a>
+                <button class="btn btn-primary magnetic"
+                    onclick="document.getElementById('contact').scrollIntoView()">Discuss a Project</button>
+            </nav>
+
+            <div class="menu-toggle" id="mobile-menu-btn">
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu" id="mobile-menu">
+        <a href="#services" class="mobile-link" onclick="toggleMenu()">Expertise</a>
+        <a href="#about" class="mobile-link" onclick="toggleMenu()">Our Vision</a>
+        <a href="#properties" class="mobile-link" onclick="toggleMenu()">Portfolio</a>
+        <a href="#careers" class="mobile-link" onclick="toggleMenu()">Careers</a>
+        <a href="#contact" class="mobile-link" onclick="toggleMenu()">Contact</a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-left">
+            <h1 class="hero-headline">
+                <span style="display:block; animation: fadeUp 1s ease 0.2s both;">Breathing</span>
+                <span style="display:block; animation: fadeUp 1s ease 0.4s both;" class="text-gold">New Life</span>
+                <span style="display:block; animation: fadeUp 1s ease 0.6s both;">Into Properties.</span>
+            </h1>
+            <div class="hero-line" id="hero-line"></div>
+            <p class="hero-subtext" style="animation: fadeUp 1s ease 0.8s both;">Acquiring neglected structures and
+                executing comprehensive, high-end renovations to redefine the standard of luxury living.</p>
+            <div class="hero-actions" style="animation: fadeUp 1s ease 1s both;">
+                <button class="btn btn-primary magnetic"
+                    onclick="document.getElementById('contact').scrollIntoView()">Discuss a Project</button>
+                <a href="#properties" class="btn-text">View Renovations</a>
+            </div>
+        </div>
+        <div class="hero-right">
+            <div class="hero-img-mask" id="hero-img-mask">
+                <img src="./images/hero.jpg" alt="Luxury Renovated Interior" id="hero-img">
+            </div>
+        </div>
+
+        <!-- Marquee Bottom -->
+        <div class="marquee-container">
+            <div class="marquee-track">
+                <span class="marquee-text">PROPERTY ACQUISITION · STRUCTURAL RENOVATION · INTERIOR RESTORATION · ASSET
+                    MANAGEMENT ·</span>
+                <span class="marquee-text">PROPERTY ACQUISITION · STRUCTURAL RENOVATION · INTERIOR RESTORATION · ASSET
+                    MANAGEMENT ·</span>
+                <span class="marquee-text">PROPERTY ACQUISITION · STRUCTURAL RENOVATION · INTERIOR RESTORATION · ASSET
+                    MANAGEMENT ·</span>
+            </div>
+            <!-- Duplicated track for seamless loop -->
+            <div class="marquee-track" aria-hidden="true">
+                <span class="marquee-text">PROPERTY ACQUISITION · STRUCTURAL RENOVATION · INTERIOR RESTORATION · ASSET
+                    MANAGEMENT ·</span>
+                <span class="marquee-text">PROPERTY ACQUISITION · STRUCTURAL RENOVATION · INTERIOR RESTORATION · ASSET
+                    MANAGEMENT ·</span>
+                <span class="marquee-text">PROPERTY ACQUISITION · STRUCTURAL RENOVATION · INTERIOR RESTORATION · ASSET
+                    MANAGEMENT ·</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container stats-grid reveal-up">
+            <div class="stat-item">
+                <div class="stat-num-container">
+                    <span class="stat-num counter" data-target="2">0</span><span class="stat-num">+</span>
+                </div>
+                <br><span class="label">Years of Excellence</span>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num-container">
+                    <span class="stat-num counter" data-target="10">0</span><span class="stat-num">+</span>
+                </div>
+                <br><span class="label">Properties Renovated</span>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num-container">
+                    <span class="stat-num">All&nbsp;</span><span class="stat-num">UK</span>
+                </div>
+                <br><span class="label">Locations Covered</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services-section reveal-up" id="services">
+        <div class="container">
+            <div class="section-header">
+                <span class="label text-gold">Our Expertise</span>
+                <h2 class="section-title">Comprehensive<br>Restoration.</h2>
+            </div>
+
+            <div class="services-grid">
+                <div class="service-card">
+                    <svg class="service-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="1"
+                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                        </path>
+                    </svg>
+                    <h3>Property Acquisition</h3>
+                    <p>Identifying and acquiring undervalued, neglected properties across the UK with exceptional
+                        transformation potential.</p>
+                    <span class="service-watermark">01</span>
+                </div>
+
+                <div class="service-card">
+                    <svg class="service-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="1"
+                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                        </path>
+                    </svg>
+                    <h3>Structural Renovation</h3>
+                    <p>Executing foundational repairs, layout reconfigurations, and comprehensive structural upgrades to
+                        ensure long-term stability.</p>
+                    <span class="service-watermark">02</span>
+                </div>
+
+                <div class="service-card">
+                    <svg class="service-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="1"
+                            d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path>
+                    </svg>
+                    <h3>Interior Restoration</h3>
+                    <p>Meticulously redesigning interiors, updating plumbing and electricals, and installing premium
+                        modern finishes.</p>
+                    <span class="service-watermark">03</span>
+                </div>
+
+                <div class="service-card">
+                    <svg class="service-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="square" stroke-linejoin="miter" stroke-width="1"
+                            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                        </path>
+                    </svg>
+                    <h3>Asset Management</h3>
+                    <p>Providing end-to-end management of our restored portfolio to maximize yield and ensure
+                        unparalleled tenant satisfaction.</p>
+                    <span class="service-watermark">04</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section (Sticky Scroll) -->
+    <section class="about-section" id="about">
+        <div class="container about-grid">
+            <div class="about-left">
+                <div class="sticky-wrapper">
+                    <div class="about-text-block active" id="text-1">
+                        <h2>Seeing <span class="text-gold">Potential.</span></h2>
+                        <p>Where others see dilapidation, we see opportunity. We specialize in acquiring neglected
+                            buildings and envisioning their modern, premium future, ensuring every square foot is
+                            optimized.</p>
+                    </div>
+                    <div class="about-text-block" id="text-2">
+                        <h2>Expert <span class="text-gold">Execution.</span></h2>
+                        <p>Our renovation process is uncompromising. We manage every element—from complex structural
+                            reinforcements to bespoke interior design—ensuring the highest quality standards are
+                            consistently met.</p>
+                    </div>
+                    <div class="about-text-block" id="text-3">
+                        <h2>Elevated <span class="text-gold">Assets.</span></h2>
+                        <p>The result is a portfolio of high-performing, modernized properties. From foundational
+                            repairs to the final brushstroke, we deliver assets that revitalize neighborhoods and
+                            redefine luxury.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="about-right">
+                <div class="sticky-img-container">
+                    <img src="./images/1.jpg" alt="Pre-renovation space" class="about-img-panel active" data-target="text-1">
+
+                    <img src="./images/2.jpg" alt="Construction and renovation process" class="about-img-panel"
+                        data-target="text-2">
+
+                    <img src="./images/12.jpg" alt="Fully renovated premium interior" class="about-img-panel"
+                        data-target="text-3">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Properties Section (Auto-Crossfade Before/After) -->
+    <section class="properties-section reveal-up" id="properties">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Renovation Portfolio.</h2>
+            </div>
+
+            <div class="prop-tabs">
+                <button class="prop-tab active" onclick="switchTab(this, 'sale')">Recently Completed</button>
+                <button class="prop-tab" onclick="switchTab(this, 'let')">In Development</button>
+                <div class="tab-indicator" id="tab-indicator" style="width: 150px;"></div>
+            </div>
+
+            <div id="prop-sale" class="prop-list">
+                <div class="prop-card">
+                    <div class="prop-img-wrap">
+                        <!-- Before Image (Base) -->
+                        <img src="./images/b1.jpg" alt="Before Renovation">
+                        <!-- After Image (Fades In/Out) -->
+                        <img src="./images/a1.jpg" alt="After Renovation" class="img-after">
+
+                        <div
+                            class="absolute top-4 right-4 bg-black/70 text-white text-[10px] uppercase px-3 py-1 rounded backdrop-blur-md z-10 border border-white/20">
+                            Before & After
+                        </div>
+                    </div>
+                    <div class="prop-details">
+                        <div class="prop-price">Premium Craftsman Kitchen</div>
+                        <div class="label prop-address">Countryside Estate, Cotswolds</div>
+                        <p class="text-muted">A complete strip-out of a dated 90s layout. We introduced exposed
+                            structural wooden ceiling beams, bespoke dark-stained cabinetry, and a large central island
+                            topped with premium stone, transforming the room into a warm, high-end culinary center.</p>
+                        <div class="prop-meta">
+                            <div class="label">Bespoke Millwork</div>
+                            <div class="label">Stone Worktops</div>
+                            <div class="label">Exposed Beams</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="prop-card">
+                    <div class="prop-img-wrap">
+                        <img src="./images/b2.jpg">
+                        <img src="./images/a2.jpg" alt="After Renovation" class="img-after" style="animation-delay: -3s;">
+
+                        <div
+                            class="absolute top-4 right-4 bg-black/70 text-white text-[10px] uppercase px-3 py-1 rounded backdrop-blur-md z-10 border border-white/20">
+                            Before & After
+                        </div>
+                    </div>
+                    <div class="prop-details">
+                        <div class="prop-price">Heritage Library Conversion</div>
+                        <div class="label prop-address">Townhouse, Kensington W8</div>
+                        <p class="text-muted">We elevated a standard, uninspired living area into a sophisticated
+                            gentleman's lounge. This renovation featured the installation of floor-to-ceiling walnut
+                            bookcases, custom wood paneling over the fireplace, and rich heritage styling.</p>
+                        <div class="prop-meta">
+                            <div class="label">Custom Paneling</div>
+                            <div class="label">Built-in Library</div>
+                            <div class="label">Heritage Finish</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="prop-let" class="prop-list" style="display: none;">
+                <div class="prop-card">
+                    <div class="prop-img-wrap">
+                        <img src="./images/b3.jpg" alt="Before Renovation">
+                        <img src="./images/a3.jpg" alt="After Renovation" class="img-after">
+
+                        <div
+                            class="absolute top-4 right-4 bg-black/70 text-white text-[10px] uppercase px-3 py-1 rounded backdrop-blur-md z-10 border border-white/20">
+                            Before & After
+                        </div>
+                    </div>
+                    <div class="prop-details">
+                        <div class="prop-price">Interior Restoration</div>
+                        <div class="label prop-address">Mount Street, Mayfair W1K</div>
+                        <p class="text-muted">Currently undergoing a full strip-out and modernization. We are carefully
+                            preserving period features while integrating state-of-the-art smart home technology.</p>
+                        <div class="prop-details">
+                            <div class="prop-price">Open-Plan Modernization</div>
+                            <div class="label prop-address">Suburban Residence, Surrey</div>
+                            <p class="text-muted">Reconfigured an empty, builder-basic vaulted room into a seamless
+                                open-plan living area. We upgraded the foundational flooring, installed a minimalist
+                                contemporary kitchen suite, and optimized the layout to highlight the architectural
+                                volume.</p>
+                            <div class="prop-meta">
+                                <div class="label">Vaulted Ceilings</div>
+                                <div class="label">Minimalist Suite</div>
+                                <div class="label">Open Concept</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="view-all-wrap">
+                <a href="#" class="view-all-link">View All Projects <span>&rarr;</span></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section reveal-up">
+        <div class="marquee-wrapper">
+            <div class="testi-track">
+                <div class="testi-card">
+                    <p class="testi-text">"Land Vue's ability to take a dilapidated shell and transform it into a
+                        premium residential asset is truly remarkable."</p>
+                    <div class="testi-sep"></div>
+                    <div class="testi-author label">Lord Harrington, Belgravia</div>
+                </div>
+
+                <div class="testi-card">
+                    <p class="testi-text">"The structural and interior renovations they executed on our block completely
+                        revitalized the property's market value."</p>
+                    <div class="testi-sep"></div>
+                    <div class="testi-author label">Elena Rostova, Private Investor</div>
+                </div>
+
+                <div class="testi-card">
+                    <p class="testi-text">"A masterclass in property restoration. They handle the complex renovation
+                        process with absolute precision and professionalism."</p>
+                    <div class="testi-sep"></div>
+                    <div class="testi-author label">J. Sterling, Mayfair</div>
+                </div>
+
+                <div class="testi-card">
+                    <p class="testi-text">"From initial acquisition to final interior finishes, their renovation-first
+                        approach to property management is unmatched."</p>
+                    <div class="testi-sep"></div>
+                    <div class="testi-author label">A. Chen, Corporate Holding</div>
+                </div>
+            </div>
+            <!-- Duplicate track for seamless loop -->
+            <div class="testi-track" aria-hidden="true">
+                <div class="testi-card">
+                    <p class="testi-text">"Land Vue's ability to take a dilapidated shell and transform it into a
+                        premium residential asset is truly remarkable."</p>
+                    <div class="testi-sep"></div>
+                    <div class="testi-author label">Lord Harrington, Belgravia</div>
+                </div>
+
+                <div class="testi-card">
+                    <p class="testi-text">"The structural and interior renovations they executed on our block completely
+                        revitalized the property's market value."</p>
+                    <div class="testi-sep"></div>
+                    <div class="testi-author label">Elena Rostova, Private Investor</div>
+                </div>
+
+                <div class="testi-card">
+                    <p class="testi-text">"A masterclass in property restoration. They handle the complex renovation
+                        process with absolute precision and professionalism."</p>
+                    <div class="testi-sep"></div>
+                    <div class="testi-author label">J. Sterling, Mayfair</div>
+                </div>
+
+                <div class="testi-card">
+                    <p class="testi-text">"From initial acquisition to final interior finishes, their renovation-first
+                        approach to property management is unmatched."</p>
+                    <div class="testi-sep"></div>
+                    <div class="testi-author label">A. Chen, Corporate Holding</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Careers Section -->
+    <section class="careers-section reveal-up" id="careers">
+        <div class="careers-watermark">CAREERS</div>
+        <div class="container relative">
+            <h2 class="section-title" style="margin-bottom: 40px;">Join the Firm.</h2>
+
+            <div class="job-filters" id="job-filters">
+                <button class="filter-pill active" data-filter="all">All</button>
+                <button class="filter-pill" data-filter="full-time">Full-Time</button>
+                <button class="filter-pill" data-filter="advisory">Advisory</button>
+                <button class="filter-pill" data-filter="management">Management</button>
+            </div>
+
+            <div class="job-list" id="job-list">
+
+                <!-- New Highlighted Role -->
+                <div class="job-card" data-category="full-time management">
+                    <div class="job-title">
+                        Business Support Officer
+                        <span class="job-title-sub text-gold">(Property & Facilities Operations)</span>
+                    </div>
+                    <div class="job-meta">
+                        <div>
+                            <span class="label">Type</span>
+                            <p class="text-muted">Full-Time</p>
+                        </div>
+                        <div>
+                            <span class="label">Location</span>
+                            <p class="text-muted">London HQ</p>
+                        </div>
+                    </div>
+                    <div class="job-action">
+                        <button class="btn btn-primary magnetic" onclick="openModal('Business Support Officer')">Apply
+                            Now</button>
+                    </div>
+                </div>
+
+                <div class="job-card" data-category="full-time management">
+                    <div class="job-title">Senior Portfolio Manager</div>
+                    <div class="job-meta">
+                        <div>
+                            <span class="label">Type</span>
+                            <p class="text-muted">Full-Time</p>
+                        </div>
+                        <div>
+                            <span class="label">Location</span>
+                            <p class="text-muted">London HQ</p>
+                        </div>
+                    </div>
+                    <div class="job-action">
+                        <button class="btn btn-primary magnetic" onclick="openModal('Senior Portfolio Manager')">Apply
+                            Now</button>
+                    </div>
+                </div>
+
+                <div class="job-card" data-category="full-time advisory">
+                    <div class="job-title">Prime Lettings Negotiator</div>
+                    <div class="job-meta">
+                        <div>
+                            <span class="label">Type</span>
+                            <p class="text-muted">Full-Time</p>
+                        </div>
+                        <div>
+                            <span class="label">Location</span>
+                            <p class="text-muted">Mayfair Office</p>
+                        </div>
+                    </div>
+                    <div class="job-action">
+                        <button class="btn btn-primary magnetic" onclick="openModal('Prime Lettings Negotiator')">Apply
+                            Now</button>
+                    </div>
+                </div>
+
+                <div class="job-card" data-category="contract management">
+                    <div class="job-title">Block Management Director</div>
+                    <div class="job-meta">
+                        <div>
+                            <span class="label">Type</span>
+                            <p class="text-muted">Contract</p>
+                        </div>
+                        <div>
+                            <span class="label">Location</span>
+                            <p class="text-muted">London HQ</p>
+                        </div>
+                    </div>
+                    <div class="job-action">
+                        <button class="btn btn-primary magnetic" onclick="openModal('Block Management Director')">Apply
+                            Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Application Modal -->
+    <div class="modal-overlay" id="job-modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()">×</button>
+            <h3 class="serif" style="font-size: 2.5rem; margin-bottom: 8px;">Submit Profile</h3>
+            <p class="text-muted" style="margin-bottom: 32px;">Applying for: <span id="modal-role"
+                    class="text-gold"></span></p>
+
+            <form id="apply-form"
+                onsubmit="event.preventDefault(); alert('Application Received. Our partners will be in touch.'); closeModal();">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Full Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" class="form-control" placeholder="Email Address" required>
+                </div>
+                <div class="form-group">
+                    <input type="tel" class="form-control" placeholder="Phone Number">
+                </div>
+                <div class="form-group" style="margin-top: 2rem;">
+                    <label class="label" style="display:block; margin-bottom: 8px;">Upload CV (PDF)</label>
+                    <input type="file" class="form-control" style="padding-bottom: 12px; font-size: 13px;" required>
+                </div>
+                <button type="submit" class="btn-submit magnetic" style="margin-top: 16px;">Send Application</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <section class="contact-section reveal-up" id="contact">
+        <div class="container contact-grid">
+            <div class="contact-details">
+                <h2 class="section-title">Private<br>Consultation.</h2>
+
+                <div class="contact-info-block">
+                    <span class="label text-gold">London Headquarters</span>
+                    <p style="margin-top: 10px;">Suite G The Clockhouse,<br>Barking, Greater London, IG11 8EQ</p>
+                </div>
+
+                <div class="contact-info-block">
+                    <span class="label text-gold">Direct Inquiries</span>
+                    <p style="margin-top: 10px;">+44 (0) 74 4268 6562<br>info@landvuelimited.com</p>
+                </div>
+
+                <div class="office-hours">
+                    <div>
+                        <span style="color: var(--color-white)">Mon - Fri</span><br>
+                        09:00 - 18:00
+                    </div>
+                    <div>
+                        <span style="color: var(--color-white)">Sat - Sun</span><br>
+                        By Appointment Only
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-form-wrap">
+                <form id="landvue-contact-form" onsubmit="sendInquiryEmail(event)">
+                    <div class="form-group">
+                        <input type="text" id="user-name" class="form-control" placeholder="Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="user-email" class="form-control" placeholder="Email" required>
+                    </div>
+                    <div class="form-group">
+                        <select id="user-inquiry" class="form-control" required style="appearance: none;">
+                            <option value="" disabled selected>Nature of Inquiry</option>
+                            <option value="Property Acquisition" style="color:#000;">Property Acquisition</option>
+                            <option value="Renovation Partnership" style="color:#000;">Renovation Partnership</option>
+                            <option value="Block Management" style="color:#000;">Block Management</option>
+                            <option value="Careers / Support Officer" style="color:#000;">Careers / Support Officer
+                            </option>
+                            <option value="Other" style="color:#000;">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-top: 2rem;">
+                        <textarea id="user-message" class="form-control" placeholder="Message" rows="4"
+                            style="resize: none;"></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit magnetic" style="margin-top: 1rem;">Request Call</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-top">
+                <a href="#" class="logo">Land Vue</a>
+                <div style="display: flex; gap: 2rem;">
+                    <!-- <a href="" class="label" style="color: var(--color-white); text-decoration: none;">LINKEDIN</a> -->
+                    <a href="https://www.instagram.com/landvue_stays?igsh=MXJqanZ5eXMwM2N1aQ==" class="label"
+                        style="color: var(--color-white); text-decoration: none;" target="_blank">INSTAGRAM</a>
+                </div>
+            </div>
+
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Services</h4>
+                    <ul>
+                        <li><a href="#">Property Acquisition</a></li>
+                        <li><a href="#">Structural Renovation</a></li>
+                        <li><a href="#">Interior Restoration</a></li>
+                        <li><a href="#">Asset Management</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#about">Our Vision</a></li>
+                        <li><a href="#properties">Portfolio</a></li>
+                        <li><a href="#careers">Careers</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Offices</h4>
+                    <ul>
+                        <li><a href="#">London (HQ)</a></li>
+                        <li><a href="#">Manchester</a></li>
+                        <li><a href="#">Birmingham</a></li>
+                        <li><a href="#">National Coverage</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li>
+                            <p>Privacy Policy</p>
+                        </li>
+                        <li>
+                            <p>Company registration - 15615317</p>
+                        </li>
+                        <li>
+                            <p>VAT numbers - 498673124</p>
+                        </li>
+                        <li>
+                            <p>Member of Property Redress Scheme & CMP</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Land Vue Property Management Ltd. Registered in England & Wales.</p>
+                <p>Designed for Excellence.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // --- 1. Loader ---
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+                // Trigger counter animation
+                runCounters();
+            }, 800);
+        });
+
+        // --- 2. Header Scroll Effect & Mobile Menu ---
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) header.classList.add('scrolled');
+            else header.classList.remove('scrolled');
+        });
+
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('active');
+        });
+        function toggleMenu() {
+            mobileMenu.classList.remove('active');
+        }
+
+        // --- 3. Reveal on Scroll ---
+        const observerOptions = { threshold: 0.1, rootMargin: "0px 0px -50px 0px" };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el));
+
+        // --- 4. Counter Animation ---
+        function runCounters() {
+            const counters = document.querySelectorAll('.counter');
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const duration = 2000; // ms
+                const increment = target / (duration / 16);
+                let current = 0;
+
+                const updateCounter = () => {
+                    current += increment;
+                    if (current < target) {
+                        counter.innerText = Math.ceil(current);
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.innerText = target;
+                    }
+                };
+                updateCounter();
+            });
+        }
+
+        // --- 5. Magnetic Buttons ---
+        const magneticElements = document.querySelectorAll('.magnetic');
+        magneticElements.forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px) scale(1.02)`;
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = `translate(0px, 0px) scale(1)`;
+            });
+        });
+
+        // --- 6. Sticky About Section Crossfade (Fixed) ---
+        const textBlocks = document.querySelectorAll('.about-text-block');
+        const imgPanels = document.querySelectorAll('.about-img-panel');
+
+        const stickyObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Dim all text
+                    textBlocks.forEach(tb => tb.classList.remove('active'));
+                    // Highlight current text
+                    entry.target.classList.add('active');
+
+                    // Crossfade images using CSS Opacity
+                    const targetId = entry.target.getAttribute('id');
+                    imgPanels.forEach(img => {
+                        if (img.getAttribute('data-target') === targetId) {
+                            img.classList.add('active');
+                        } else {
+                            img.classList.remove('active');
+                        }
+                    });
+                }
+            });
+        }, { rootMargin: "-40% 0px -40% 0px", threshold: 0 }); // Threshold 0 triggers cleanly for tall elements
+
+        textBlocks.forEach(block => stickyObserver.observe(block));
+
+        // --- 7. Properties Tab Switcher ---
+        function switchTab(btn, targetId) {
+            // Update buttons
+            document.querySelectorAll('.prop-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Move Indicator
+            const indicator = document.getElementById('tab-indicator');
+            indicator.style.width = btn.offsetWidth + 'px';
+            indicator.style.left = btn.offsetLeft + 'px';
+
+            // Show Content
+            document.querySelectorAll('.prop-list').forEach(list => list.style.display = 'none');
+            document.getElementById('prop-' + targetId).style.display = 'grid';
+
+            // Force re-flow for animation
+            const targetList = document.getElementById('prop-' + targetId);
+            targetList.style.opacity = '0';
+            setTimeout(() => { targetList.style.opacity = '1'; targetList.style.transition = 'opacity 0.5s'; }, 50);
+        }
+
+        // Init indicator
+        window.addEventListener('load', () => {
+            const firstTab = document.querySelector('.prop-tab.active');
+            if (firstTab) {
+                const indicator = document.getElementById('tab-indicator');
+                indicator.style.width = firstTab.offsetWidth + 'px';
+                indicator.style.left = firstTab.offsetLeft + 'px';
+            }
+        });
+
+        // --- 8. Job Filters ---
+        const filterBtns = document.querySelectorAll('.filter-pill');
+        const jobCards = document.querySelectorAll('.job-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filter = btn.getAttribute('data-filter');
+                jobCards.forEach(card => {
+                    if (filter === 'all' || card.getAttribute('data-category').includes(filter)) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // --- 9. Modal Functionality ---
+        const modal = document.getElementById('job-modal');
+        const roleText = document.getElementById('modal-role');
+
+        function openModal(role) {
+            roleText.innerText = role;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // prevent background scrolling
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            document.getElementById('apply-form').reset();
+        }
+
+        // Close modal on outside click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+
+        // --- 10. Contact Form Mailto ---
+        function sendInquiryEmail(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('user-name').value;
+            const email = document.getElementById('user-email').value;
+            const inquiry = document.getElementById('user-inquiry').value;
+            const message = document.getElementById('user-message').value;
+
+            const recipient = "info@landvuelimited.com";
+            const subject = encodeURIComponent(`New Inquiry: ${inquiry} - ${name}`);
+            const body = encodeURIComponent(
+                `Name: ${name}\n` +
+                `Email: ${email}\n` +
+                `Nature of Inquiry: ${inquiry}\n\n` +
+                `Message:\n${message}`
+            );
+
+            window.location.href = `mailto:${recipient}?subject=${subject}&body=${body}`;
+        }
+    </script>
+</body>
+
+</html>
