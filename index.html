@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Land Vue | Premium Property Renovation & Management</title>
+    <title>Landvue | Premium Property Renovation & Management</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -314,7 +314,7 @@
 
         .hero-img-mask {
             width: 100%;
-            height: 100%;
+            Renovation height: 100%;
             overflow: hidden;
             border-radius: 4px;
         }
@@ -330,7 +330,7 @@
         /* --- HERO MARQUEE --- */
         .marquee-container {
             position: absolute;
-            bottom: 0;
+            bottom: -90px;
             left: 0;
             width: 100%;
             padding: 1.2rem 0;
@@ -1054,12 +1054,12 @@
     <div class="grain-overlay"></div>
 
     <!-- Loader -->
-    <div class="loader" id="loader">Land Vue</div>
+    <div class="loader" id="loader">Landvue</div>
 
     <!-- Navigation -->
     <header id="header">
         <div class="container nav-container">
-            <a href="#" class="logo">Land Vue</a>
+            <a href="#" class="logo">Landvue</a>
 
             <nav class="nav-links">
                 <a href="#services">Expertise</a>
@@ -1242,7 +1242,8 @@
 
             <div class="about-right">
                 <div class="sticky-img-container">
-                    <img src="./images/1.jpg" alt="Pre-renovation space" class="about-img-panel active" data-target="text-1">
+                    <img src="./images/1.jpg" alt="Pre-renovation space" class="about-img-panel active"
+                        data-target="text-1">
 
                     <img src="./images/2.jpg" alt="Construction and renovation process" class="about-img-panel"
                         data-target="text-2">
@@ -1255,6 +1256,7 @@
     </section>
 
     <!-- Properties Section (Auto-Crossfade Before/After) -->
+    <!-- Properties Section (Auto-Crossfade Before/After) -->
     <section class="properties-section reveal-up" id="properties">
         <div class="container">
             <div class="section-header">
@@ -1262,17 +1264,17 @@
             </div>
 
             <div class="prop-tabs">
-                <button class="prop-tab active" onclick="switchTab(this, 'sale')">Recently Completed</button>
-                <button class="prop-tab" onclick="switchTab(this, 'let')">In Development</button>
+                <button class="prop-tab active" onclick="switchTab(this, 'residential')">Residential</button>
+                <button class="prop-tab" onclick="switchTab(this, 'commercial')">Commercial</button>
                 <div class="tab-indicator" id="tab-indicator" style="width: 150px;"></div>
             </div>
 
-            <div id="prop-sale" class="prop-list">
+            <!-- Residential Tab -->
+            <div id="prop-residential" class="prop-list">
+                <!-- Card 1: Craftsman Kitchen -->
                 <div class="prop-card">
                     <div class="prop-img-wrap">
-                        <!-- Before Image (Base) -->
                         <img src="./images/b1.jpg" alt="Before Renovation">
-                        <!-- After Image (Fades In/Out) -->
                         <img src="./images/a1.jpg" alt="After Renovation" class="img-after">
 
                         <div
@@ -1294,10 +1296,12 @@
                     </div>
                 </div>
 
+                <!-- Card 2: Heritage Library -->
                 <div class="prop-card">
                     <div class="prop-img-wrap">
-                        <img src="./images/b2.jpg">
-                        <img src="./images/a2.jpg" alt="After Renovation" class="img-after" style="animation-delay: -3s;">
+                        <img src="./images/b2.jpg" alt="Before Renovation">
+                        <img src="./images/a2.jpg" alt="After Renovation" class="img-after"
+                            style="animation-delay: -3s;">
 
                         <div
                             class="absolute top-4 right-4 bg-black/70 text-white text-[10px] uppercase px-3 py-1 rounded backdrop-blur-md z-10 border border-white/20">
@@ -1317,13 +1321,41 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Card 3: Open Plan Mod -->
+                <!-- <div class="prop-card">
+                    <div class="prop-img-wrap">
+                        <img src="./images/b4.jpg" alt="Before Residential Renovation">
+                        <img src="./images/a4.jpg" alt="After Residential Renovation" class="img-after"
+                            style="animation-delay: -1.5s;">
+                        <div
+                            class="absolute top-4 right-4 bg-black/70 text-white text-[10px] uppercase px-3 py-1 rounded backdrop-blur-md z-10 border border-white/20">
+                            Before & After
+                        </div>
+                    </div>
+                    <div class="prop-details">
+                        <div class="prop-price">Open-Plan Modernization</div>
+                        <div class="label prop-address">Suburban Residence, Surrey</div>
+                        <p class="text-muted">Reconfigured an empty, builder-basic vaulted room into a seamless
+                            open-plan living area. We upgraded the foundational flooring, installed a minimalist
+                            contemporary kitchen suite, and optimized the layout to highlight the architectural volume.
+                        </p>
+                        <div class="prop-meta">
+                            <div class="label">Vaulted Ceilings</div>
+                            <div class="label">Minimalist Suite</div>
+                            <div class="label">Open Concept</div>
+                        </div>
+                    </div>
+                </div> -->
             </div>
 
-            <div id="prop-let" class="prop-list" style="display: none;">
+            <!-- Commercial Tab -->
+            <div id="prop-commercial" class="prop-list" style="display: none;">
+                <!-- Card 4: Commercial HQ -->
                 <div class="prop-card">
                     <div class="prop-img-wrap">
-                        <img src="./images/b3.jpg" alt="Before Renovation">
-                        <img src="./images/a3.jpg" alt="After Renovation" class="img-after">
+                        <img src="./images/c-b1.jpg" alt="Before Commercial Renovation">
+                        <img src="./images/c-a1.jpg" alt="After Commercial Renovation" class="img-after">
 
                         <div
                             class="absolute top-4 right-4 bg-black/70 text-white text-[10px] uppercase px-3 py-1 rounded backdrop-blur-md z-10 border border-white/20">
@@ -1331,30 +1363,47 @@
                         </div>
                     </div>
                     <div class="prop-details">
-                        <div class="prop-price">Interior Restoration</div>
-                        <div class="label prop-address">Mount Street, Mayfair W1K</div>
-                        <p class="text-muted">Currently undergoing a full strip-out and modernization. We are carefully
-                            preserving period features while integrating state-of-the-art smart home technology.</p>
-                        <div class="prop-details">
-                            <div class="prop-price">Open-Plan Modernization</div>
-                            <div class="label prop-address">Suburban Residence, Surrey</div>
-                            <p class="text-muted">Reconfigured an empty, builder-basic vaulted room into a seamless
-                                open-plan living area. We upgraded the foundational flooring, installed a minimalist
-                                contemporary kitchen suite, and optimized the layout to highlight the architectural
-                                volume.</p>
-                            <div class="prop-meta">
-                                <div class="label">Vaulted Ceilings</div>
-                                <div class="label">Minimalist Suite</div>
-                                <div class="label">Open Concept</div>
-                            </div>
+                        <div class="prop-price">Boutique Office Conversion</div>
+                        <div class="label prop-address">Marylebone, London</div>
+                        <p class="text-muted">A specialized restoration of a period property. We renovated the
+                            structural timber beams and preserved the original feature brickwork while integrating
+                            modern climate control and lighting elements to create a high-end executive suite.</p>
+                        <div class="prop-meta">
+                            <div class="label">Period Features</div>
+                            <div class="label">Timber Restoration</div>
+                            <div class="label">Executive Fit-out</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="prop-card">
+                    <div class="prop-img-wrap">
+                        <img src="./images/c-b2.jpg" alt="Before Industrial Renovation">
+                        <img src="./images/c-a2.jpg" alt="After Industrial Renovation" class="img-after"
+                            style="animation-delay: -2s;">
+                        <div
+                            class="absolute top-4 right-4 bg-black/70 text-white text-[10px] uppercase px-3 py-1 rounded backdrop-blur-md z-10 border border-white/20">
+                            Before & After
+                        </div>
+                    </div>
+                    <div class="prop-details">
+                        <div class="prop-price">Luminous Co-working Suite</div>
+                        <div class="label prop-address">MediaCity, Salford</div>
+                        <p class="text-muted">A full-scale modernization of a decommissioned commercial floorplate. Key
+                            elements renovated include the installation of acoustic mesh ceiling systems, high-traffic
+                            ergonomic flooring, and an open-concept layout designed for collaborative tech firms.</p>
+                        <div class="prop-meta">
+                            <div class="label">Acoustic Mesh</div>
+                            <div class="label">Open Plan</div>
+                            <div class="label">Ergonomic Design</div>
                         </div>
                     </div>
                 </div>
             </div>
-
+            <!-- 
             <div class="view-all-wrap">
                 <a href="#" class="view-all-link">View All Projects <span>&rarr;</span></a>
-            </div>
+            </div> -->
         </div>
     </section>
 
@@ -1363,7 +1412,7 @@
         <div class="marquee-wrapper">
             <div class="testi-track">
                 <div class="testi-card">
-                    <p class="testi-text">"Land Vue's ability to take a dilapidated shell and transform it into a
+                    <p class="testi-text">"Landvue's ability to take a dilapidated shell and transform it into a
                         premium residential asset is truly remarkable."</p>
                     <div class="testi-sep"></div>
                     <div class="testi-author label">Lord Harrington, Belgravia</div>
@@ -1393,7 +1442,7 @@
             <!-- Duplicate track for seamless loop -->
             <div class="testi-track" aria-hidden="true">
                 <div class="testi-card">
-                    <p class="testi-text">"Land Vue's ability to take a dilapidated shell and transform it into a
+                    <p class="testi-text">"Landvue's ability to take a dilapidated shell and transform it into a
                         premium residential asset is truly remarkable."</p>
                     <div class="testi-sep"></div>
                     <div class="testi-author label">Lord Harrington, Belgravia</div>
@@ -1606,7 +1655,7 @@
     <footer>
         <div class="container">
             <div class="footer-top">
-                <a href="#" class="logo">Land Vue</a>
+                <a href="#" class="logo">Landvue</a>
                 <div style="display: flex; gap: 2rem;">
                     <!-- <a href="" class="label" style="color: var(--color-white); text-decoration: none;">LINKEDIN</a> -->
                     <a href="https://www.instagram.com/landvue_stays?igsh=MXJqanZ5eXMwM2N1aQ==" class="label"
@@ -1662,7 +1711,7 @@
             </div>
 
             <div class="footer-bottom">
-                <p>&copy; 2026 Land Vue Property Management Ltd. Registered in England & Wales.</p>
+                <p>&copy; 2026 Landvue Property Management Ltd. Registered in England & Wales.</p>
                 <p>Designed for Excellence.</p>
             </div>
         </div>
